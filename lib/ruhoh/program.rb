@@ -1,3 +1,4 @@
+require 'sprockets'
 class Ruhoh
   module Program
     
@@ -29,21 +30,24 @@ class Ruhoh
         use Rack::Lint
         use Rack::ShowExceptions
 
-        # Serve base media
-        map Ruhoh.urls.media do
-          run Rack::File.new(Ruhoh.paths.media)
+        map "#{Ruhoh.urls.theme}/" do
+          environment = Sprockets::Environment.new
+          environment.append_path Ruhoh.paths.theme
+          run environment
         end
         
-        # Serve theme assets
-        map Ruhoh.urls.theme do
-          run Rack::File.new(Ruhoh.paths.theme)
+        map "#{Ruhoh.urls.widgets}/" do
+          environment = Sprockets::Environment.new
+          environment.append_path Ruhoh.paths.widgets
+          run environment
         end
         
-        # Serve widget javascripts
-        map Ruhoh.urls.widgets do
-          run Rack::File.new(Ruhoh.paths.widgets)
+        map "#{Ruhoh.urls.media}/" do
+          environment = Sprockets::Environment.new
+          environment.append_path Ruhoh.paths.media
+          run environment
         end
-
+        
         map '/' do
           run Ruhoh::Previewer.new(Ruhoh::Page.new)
         end
