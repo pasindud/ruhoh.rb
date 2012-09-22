@@ -39,7 +39,7 @@ class Ruhoh
       
       def pages
         pages = []
-        self.context['db']['pages'].each_value {|page| pages << page }
+        @ruhoh.db.pages.each_value {|page| pages << page }
         self.mark_active_page(pages)
       end
       
@@ -60,7 +60,7 @@ class Ruhoh
 
       def to_pages(sub_context)
         pages = Array(sub_context).map { |id|
-          self.context['db']['pages'][id]
+          @ruhoh.db.pages[id]
         }.compact
         self.mark_active_page(pages)
       end
